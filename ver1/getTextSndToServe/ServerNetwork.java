@@ -1,4 +1,4 @@
-package com.example.eunsong.sndtoserver;
+package com.example.eunsong.network;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
