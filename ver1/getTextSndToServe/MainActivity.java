@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.concurrent.ExecutionException;
 
 
@@ -18,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
     MediaPlayer player;
     MediaRecorder recorder;
     int playbackPosition = 0;
-    static final String RECORDED_FILE = Environment.getExternalStorageDirectory().getAbsolutePath()+"/sound.wav";
+    static final String FILE_NAME = "sound.wav";
+    static final String RECORDED_FILE = Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+FILE_NAME;
 
 
 
@@ -37,17 +39,24 @@ public class MainActivity extends AppCompatActivity {
         sendToServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (recorder != null) {
+                File inputFile = new File(RECORDED_FILE);
+
+                //파일이 있는지 없는지 확인
+                if (inputFile.exists() == true) {
+                    Log.e("try in", "왜때매");
                     ServerNetwork send = new ServerNetwork();
                     String result = null;
                     try {
-                        result = send.execute(RECORDED_FILE).get();
+                        result = send.execute(FILE_NAME).get();
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     responseView.setText(result);
+
+                    //서버에 보낸 후 삭제
+                    inputFile.delete();
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "전송할 파일이 없습니다.녹음을 먼저 해주세요",
@@ -98,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-       playBtn.setOnClickListener(new View.OnClickListener() {
+        playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
