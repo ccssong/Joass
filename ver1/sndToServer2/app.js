@@ -30,19 +30,36 @@ app.get('/', function(req, res){
 app.post('/upload', upload.single('sound'),  function(req, res){
         console.log(req.header);
         console.log(req.file);
-
+             
         const spawn = require("child_process").spawn;
         const pythonProcess = spawn('python3', ["/home/ubuntu/NN/test_on_server.py"]);
-
+        
         const newDirect = "/var/www/html/";
-        const file2read = "new.php";
+        const file2read = "new.php"; 
         var fs = require('file-system');
-
+    
         pythonProcess.stdout.on('data', function(data){
                 console.log(data.toString());
                 console.log("?");
                 res.setHeader('Content-Type', 'text/plain');
-                 });
+                
+                fs.readFile(path.join(newDirect,file2read), 'utf8', function(err, text){
+                        if(err){
+                                console.log("설마");
+                                console.log(err.toStrong());
+                        }
+                        //else{
+                                console.log("access");
+                                console.log(text.toString());
+                                //res.send(text.toString());
+                        //}
+
+                });
+                res.send(data.toString());
+        });
+        pythonProcess.stderr.on('data', (data) => {
+                res.setHeader('Content-Type', 'text/plain');
+        });
 
 });
 
