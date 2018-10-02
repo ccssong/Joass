@@ -107,7 +107,7 @@ public class Network {
 
 
                 //close the streams
-                sourceFile.close();
+                wavfile.close();
                 dos.flush();
                 dos.close();
 
