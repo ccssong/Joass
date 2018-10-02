@@ -28,8 +28,9 @@ public class MainActivity extends AppCompatActivity {
     public MediaRecorder recorder;
 
     //녹음한 사운드
-    String FILE_NAME = "sound.wav";
-    String RECORDED_FILE = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + FILE_NAME;
+    static final String FILE_NAME = "sound.wav";
+    static final String RECORDED_FILE = Environment.getExternalStorageDirectory() + "/" + FILE_NAME;
+
 
     //서버에서 받는 response
     InputStream responseInput;
@@ -68,9 +69,10 @@ public class MainActivity extends AppCompatActivity {
                 connection = new Network();
 
                 //파일이 있는지 없는지 확인
-                File inputFile = new File(RECORDED_FILE);
+                final File inputFile = new File(RECORDED_FILE);
                 if (inputFile.exists() == true) {
                     Log.e("File_Name", FILE_NAME);
+                    Log.e("external file path", RECORDED_FILE);
 
                     new Thread(new Runnable() {
                         // 결과값
@@ -139,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                                 Intent intent = new Intent(getApplicationContext(), TTS.class);
                                 startActivity(intent);
 
+                                inputFile.delete();
                                 responseInputStream.close();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -156,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                 }
 
-                inputFile.delete();
+
 
             }
 
@@ -175,7 +178,8 @@ public class MainActivity extends AppCompatActivity {
                 recorder = new MediaRecorder();
                 recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
                 recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
                 recorder.setOutputFile(RECORDED_FILE);
                 try {
                     Toast.makeText(getApplicationContext(),
