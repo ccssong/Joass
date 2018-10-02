@@ -66,6 +66,7 @@ app.post('/upload', upload.single('sound'),  function(req, res){
 const port = 3000;
 const hostname = 'ec2-13-125-251-29.ap-northeast-2.compute.amazonaws.com';
 var server = app.listen(port,hostname, function(err){
+        if(err) throw errr;
         var host = server.address().address;
         var port = server.address().port;
 
